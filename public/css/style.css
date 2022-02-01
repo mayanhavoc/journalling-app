@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600;1,700&family=Work+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+	--primary-white: #f6f3ed;
+	--primary-red: rgb(255, 65, 54);
+	--primary-orange: rgb(255, 179, 64);
+	--primary-yellow: rgb(255, 212, 38);
+	--primary-green: rgb(49, 222, 75);
+	--primary-mint: rgb(102, 212, 207);
+	--primary-teal: rgb(93, 230, 255);
+	--primary-cyan: rgb(112, 215, 255);
+	--primary-blue: rgb(64, 156, 255);
+	--primary-indigo: rgb(125, 122, 255);
+	--primary-purple: rgb(125, 122, 255);
+	--primary-pink: rgb(255, 58, 95);
+	--primary-brown: rgb(181, 148, 105);
+	--primary-light-grey: rgb(244, 244, 244);
+	--primary-grey: rgb(152, 152, 157);
+	--primary-dark-grey: rgb(97, 97, 101);
+	--primary-dark: rgb(255, 255, 255, 0);
+	--primary-text: rgb(17, 46, 81);
+}
+
+* {
+	font-family: 'Playfair Display', serif;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+
+html {
+	/* this makes sure the padding and the border is included in the box sizing */
+	box-sizing: border-box;
+	overflow-x: hidden;
+}
+
+html body {
+	padding: 0;
+	margin: 0;
+	overflow-y: inherit;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+
+	/* Color scheme */
+
+	--textcolor: #121212;
+	--bgcolor: #fff;
+	--highlight: #2749c9;
+}
+
+@media (prefers-color-scheme: dark) {
+	* {
+		--textcolor: #dadada;
+		--bgcolor: #141414;
+		--highlight: #ffc600;
+	}
+}
+
+.secondary-font {
+	font-family: 'Work Sans', sans-serif;
+}
+
+p {
+	margin: 10px 0 !important;
+}
+
+.login-container {
+	width: 400px;
+	margin-top: 50px;
+	text-align: center;
+}
+
+.fa-small {
+	font-size: 16px !important;
+}
+
+.btn-float {
+	float: left;
+	margin-right: 10px;
+}
+
+.img-small {
+	width: 180px;
+}
+
+.card {
+	background-color: var(--primary-orange);
+}
