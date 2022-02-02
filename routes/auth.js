@@ -1,25 +1,24 @@
-const express = require('express')
-const passport = require('passport')
-const router = express.Router()
+const express = require('express');
+const passport = require('passport');
+const router = express.Router();
+const catchAsync = require('../utils/catchAsync');
+const User = require('../models/User');
+const users = require('../controllers/users');
 
-// @desc    Auth with Google
-// @router  GET /auth/google
-router.get('/google', passport.authenticate('google', {scope:['profile'] }))
+// // @desc    Auth with Google
+// // @router  GET /auth/google
+// router.get('/google', passport.authenticate('google', {scope:['profile'] }))
 
-// @desc    Google auth callback
-// @router  GET /auth/google/callback
-router.get('/google/callback', passport.authenticate('google', {
-    failureRedirect: '/'}), 
-(req, res) => {
-    res.redirect('/dashboard')
-    }
-)
+//@router   GET /register
+router.route('/register')
+    .get(users.renderRegister)
+    .post(catchAsync(users.register));
 
-// @desc    Logout user
-// @route   /auth/logout
-router.get('/logout', (req, res) => {
-    req.logout()
-    res.redirect('/')
-})
+// @router  GET /login
+router.route('/login')
+    .get(users.renderLogin)
+    .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), users.login)
+
+router.get('/logout', users.logout)
 
 module.exports = router

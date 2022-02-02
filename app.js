@@ -6,17 +6,23 @@ const morgan = require('morgan')
 const exphbs = require('express-handlebars')
 const methodOverride = require('method-override')
 const passport = require('passport')
+const LocalStrategy = require('passport-local');
+const User = require('./models/User');
 const session = require('express-session')
+const flash = require('connect-flash');
+const ExpressError = require('./utils/ExpressError');
 const MongoStore = require('connect-mongo')(session)
 const connectDB = require('./config/db')
-
+const userRoutes = require('./routes/index');
+const { v4: uuidv4 } = require('uuid');
+const id = uuidv4();
 
 
 // Load config
 dotenv.config({path: './config/config.env'})
 
 // Passport config
-require('./config/passport')(passport)
+// require('./config/passport')(passport)
 
 connectDB()
 // mongodb://localhost:27017/yelp-camp
@@ -72,23 +78,29 @@ app.use(
   })
 )
 
+app.use(flash());
+
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
 
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
-// Set global variable
-app.use(function (req, res, next) {
-    res.locals.user = req.user || null
-    next()
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  next();
 })
 
 // Static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
-app.use('/', require('./routes/index'))
-app.use('/auth', require('./routes/auth'))
+app.use('/', userRoutes);
+// app.use('/auth', require('./routes/auth'))
 app.use('/stories', require('./routes/stories'))
 
 const PORT = process.env.PORT || 3000

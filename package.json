@@ -1,5 +1,5 @@
 {
-  "name": "storybooks",
+  "name": "journalling",
   "version": "1.0.0",
   "description": "App to create public and private stories",
   "main": "app.js",
@@ -10,6 +10,7 @@
   "author": "Roberto M",
   "license": "MIT",
   "dependencies": {
+    "connect-flash": "^0.1.1",
     "connect-mongo": "^3.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -20,7 +21,9 @@
     "mongoose": "^5.12.3",
     "morgan": "^1.10.0",
     "passport": "^0.4.1",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^6.1.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"

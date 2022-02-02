@@ -90,6 +90,6 @@ p {
 	width: 180px;
 }
 
-.card {
-	background-color: var(--primary-orange);
+.submit-btn {
+	margin-bottom: 1rem;
 }
