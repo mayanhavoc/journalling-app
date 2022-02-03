@@ -13,9 +13,10 @@ const flash = require('connect-flash');
 const ExpressError = require('./utils/ExpressError');
 const MongoStore = require('connect-mongo')(session)
 const connectDB = require('./config/db')
-const userRoutes = require('./routes/index');
-const { v4: uuidv4 } = require('uuid');
-const id = uuidv4();
+const userRoutes = require('./routes/users');
+const homeRoutes = require('./routes/index');
+const storyRoutes = require('./routes/stories');
+ 
 
 
 // Load config
@@ -100,8 +101,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.use('/', userRoutes);
-// app.use('/auth', require('./routes/auth'))
-app.use('/stories', require('./routes/stories'))
+app.use('/dashboard', homeRoutes);
+app.use('/stories', storyRoutes);
 
 const PORT = process.env.PORT || 3000
 

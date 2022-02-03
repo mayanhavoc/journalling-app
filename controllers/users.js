@@ -13,9 +13,12 @@ module.exports.renderRegister = (req, res) => {
 
 module.exports.register = async (req, res, next) => {
     try {
+        const _id = req.params.id;
         const { email, username, password } = req.body;
-        const user = new User({ email, username });
-        const registeredUser = await User.register(user, password);
+        const user = new User({ _id, email, username });
+        console.log(_id);
+        const registeredUser = await User.register(_id, user, password);
+        console.log(registeredUser);
         req.login(registeredUser, err => {
             if (err) return next(err);
             req.flash('success', 'Welcome!');
@@ -35,6 +38,7 @@ module.exports.renderLogin = (req, res) => {
 }
 
 module.exports.login = (req, res) => {
+    console.log(req);
     req.flash('success', 'welcome back!');
     const redirectUrl = req.session.returnTo || '/dashboard';
     delete req.session.returnTo;
