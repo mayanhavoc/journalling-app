@@ -78,8 +78,8 @@ app.use(
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
   })
 )
-
 app.use(flash());
+
 
 // Passport middleware
 app.use(passport.initialize());
@@ -103,6 +103,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', userRoutes);
 app.use('/dashboard', homeRoutes);
 app.use('/stories', storyRoutes);
+
+app.all('*', (req, res, next) => {
+  next(new ExpressError('Page Not Found', 404))
+})
+
+app.use((err, req, res, next) => {
+  const { statusCode = 500 } = err;
+  if (!err.message) err.message = 'Oh No, Something Went Wrong!'
+  res.status(statusCode).render('error/404', { err })
+})
 
 const PORT = process.env.PORT || 3000
 

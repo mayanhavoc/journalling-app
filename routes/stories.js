@@ -1,18 +1,18 @@
-const express = require('express')
-const router = express.Router()
-// const { ensureAuth } = require('../middleware/auth')
+const express = require('express');
+const router = express.Router();
+const {isLoggedIn} = require('../middleware/auth');
 
 const Story = require('../models/Story')
 
 // @desc    Show add page
 // @route   GET /stories/add
-router.get('/add', (req, res) => {
+router.get('/add', isLoggedIn, (req, res) => {
   res.render('stories/add')
 })
 
 // @desc    Process add form
 // @route   POST /stories
-router.post('/', async (req, res) => {
+router.post('/', isLoggedIn, async (req, res) => {
   try {
     req.body.user = req.user.id
     await Story.create(req.body)
@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
 
 // @desc    Show all stories
 // @route   GET /stories
-router.get('/',  async (req, res) => {
+router.get('/',  isLoggedIn, async (req, res) => {
   try {
     const stories = await Story.find({ status: 'public' })
       .populate('user')
