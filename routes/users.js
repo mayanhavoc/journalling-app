@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const User = require('../models/User');
+const users = require('../controllers/users');
 
 router.get('/register', (req, res) => {
     res.render('register', {
@@ -9,16 +10,7 @@ router.get('/register', (req, res) => {
     });
 });
 
-router.post('/register', async (req, res) => {
-    try {
-        const { email, username, password } = req.body;
-        const user = new User({email, username});
-        const registeredUser = await User.register(user,password);
-        res.redirect('/dashboard');
-    } catch (e) {
-        console.log(e);
-    }
-})
+router.post('/register', users.register);
 
 // // @desc    Login/Landing page
 // // @route   GET /
@@ -28,12 +20,17 @@ router.get('/login', (req, res) => {
   })
 })
 
-router.post('/login', 
-  passport.authenticate('local', {
-    failureRedirect: '/login'
-  }), (req, res) => {
-    res.redirect('/dashboard');
-  });
+// router.[get('/login', 
+//   passport.authenticate('local', {
+//     failureRedirect: '/login'
+//   }), (req, res) => {
+//     console.log(res)
+//     res.redirect('/dashboard');
+//   });]
+
+router.post('/login', passport.authenticate('local', {
+  failureFlash: true, failureRedirect: '/login'
+}), users.login)
 
   // @desc    Logout user
 // @route   /auth/logout

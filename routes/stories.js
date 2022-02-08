@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const {isLoggedIn} = require('../middleware/auth');
-
-const Story = require('../models/Story')
+const { isLoggedIn, isAuthor } = require('../middleware/auth');
+const Story = require('../models/Story');
 
 // @desc    Show add page
 // @route   GET /stories/add
@@ -10,53 +9,58 @@ router.get('/add', isLoggedIn, (req, res) => {
   res.render('stories/add')
 })
 
-// @desc    Process add form
-// @route   POST /stories
-router.post('/', isLoggedIn, async (req, res) => {
-  try {
-    req.body.user = req.user.id
-    await Story.create(req.body)
-    res.redirect('/dashboard')
-  } catch (err) {
-    console.error(err)
-    res.render('error/500')
-  }
-})
 
 // @desc    Show all stories
 // @route   GET /stories
-router.get('/',  isLoggedIn, async (req, res) => {
+router.get('/', isLoggedIn,  async (req, res) => {
   try {
     const stories = await Story.find({ status: 'public' })
       .populate('user')
       .sort({ createdAt: 'desc' })
       .lean()
-
-    res.render('stories/index', {
-      stories,
-    })
+    res.render('stories/index', { stories })
   } catch (err) {
     console.error(err)
     res.render('error/500')
   }
 })
 
+
+
+// @desc    Process add form
+// @route   POST /stories
+router.post('/', isLoggedIn, async (req, res) => {
+  // try {
+  //   req.body.user = req.user.id
+  //   await Story.create(req.body)
+  //   req.flash('Success!', "You wrote a new story")
+  //   res.redirect('/dashboard')
+  //   console.log(story)
+  // } catch (err) {
+  //   console.error(err)
+  //   res.render('error/500')
+  // }
+  req.body.user = req.user.id
+  const story = await Story.create(req.body)
+  req.flash('success', 'Successfully added a new story');
+  res.redirect(`/dashboard`)
+})
+
 // @desc    Show single story
 // @route   GET /stories/:id
-router.get('/:id',  async (req, res) => {
+router.get('/:id',  isLoggedIn, async (req, res) => {
+  console.log(req.params)
   try {
-    let story = await Story.findById(req.params.id).populate('user').lean()
-
+    const story = await Story.findById(req.params.id).populate('user').lean()
     if (!story) {
+      console.log('no story')
       return res.render('error/404')
     }
-
-    if (story.user._id != req.user.id && story.status == 'private') {
+    if (story._id != req.user.id && story.status == 'private') {
+      console.log('no match')
       res.render('error/404')
     } else {
-      res.render('stories/show', {
-        story,
-      })
+      res.render('stories/show', { story })
     }
   } catch (err) {
     console.error(err)
@@ -68,7 +72,7 @@ router.get('/:id',  async (req, res) => {
 // @route   GET /stories/edit/:id
 router.get('/edit/:id', async (req, res) => {
   try {
-    const story = await Story.findOne({
+    let story = await Story.findOne({
       _id: req.params.id,
     }).lean()
 

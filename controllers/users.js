@@ -13,16 +13,13 @@ module.exports.renderRegister = (req, res) => {
 
 module.exports.register = async (req, res, next) => {
     try {
-        const _id = req.params.id;
         const { email, username, password } = req.body;
-        const user = new User({ _id, email, username });
-        console.log(_id);
-        const registeredUser = await User.register(_id, user, password);
-        console.log(registeredUser);
+        const user = new User({ email, username });
+        const registeredUser = await User.register(user, password);
         req.login(registeredUser, err => {
             if (err) return next(err);
             req.flash('success', 'Welcome!');
-            res.redirect("./users/dashboard");
+            res.redirect("/dashboard");
         })
     } catch (e) {
         console.log(e);
@@ -38,7 +35,6 @@ module.exports.renderLogin = (req, res) => {
 }
 
 module.exports.login = (req, res) => {
-    console.log(req);
     req.flash('success', 'welcome back!');
     const redirectUrl = req.session.returnTo || '/dashboard';
     delete req.session.returnTo;
