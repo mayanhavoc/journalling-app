@@ -12,7 +12,7 @@ const User = require('./models/User');
 const flash = require('connect-flash');
 const ExpressError = require('./utils/ExpressError');
 const mongoSanitize = require('express-mongo-sanitize');
-const MongoDBStore = require('connect-mongo')(session)
+const MongoStore = require('connect-mongo')(session)
 const userRoutes = require('./routes/users');
 const homeRoutes = require('./routes/index');
 const storyRoutes = require('./routes/stories');
@@ -86,6 +86,7 @@ const sessionConfig = {
     secret,
     resave: false,
     saveUninitialized: true,
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
     cookie: {
       httpOnly: true,
       // secure: true,
