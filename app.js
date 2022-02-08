@@ -81,12 +81,11 @@ app.set('view engine', '.hbs');
 
 // Sessions
 const sessionConfig = {
-    store,
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
     name: 'session',
     secret,
     resave: false,
     saveUninitialized: true,
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),
     cookie: {
       httpOnly: true,
       // secure: true,
