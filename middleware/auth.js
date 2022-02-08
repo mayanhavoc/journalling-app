@@ -10,7 +10,6 @@ module.exports.isLoggedIn = (req, res, next) => {
 
 module.exports.validateUser = (req, res, next) => {
     const { error } = storySchema.validate(req.body);
-    console.log(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg, 400)
@@ -20,11 +19,9 @@ module.exports.validateUser = (req, res, next) => {
 }
 
 module.exports.isAuthor = async (req, res, next) => {
-    const { id } = req.params;
-    const story = await Story.findById(id);
-    if (!story.author.equals(req.user._id)) {
-        req.flash('error', 'You do not have permission to do that!');
-        return res.redirect(`/stories/${id}`);
+    if (req.isAuthenticated()){
+        return next();
+    } else {
+        res.redirect('/')
     }
-    next();
 }

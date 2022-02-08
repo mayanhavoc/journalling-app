@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router();
 const passport = require('passport');
-// const { ensureAuth, ensureGuest } = require('../middleware/auth');
 const User = require('../models/User');
 const users = require('../controllers/users');
 const Story = require('../models/Story');
