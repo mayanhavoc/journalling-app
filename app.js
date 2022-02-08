@@ -13,21 +13,18 @@ const flash = require('connect-flash');
 const ExpressError = require('./utils/ExpressError');
 const mongoSanitize = require('express-mongo-sanitize');
 const MongoDBStore = require('connect-mongo')(session)
-const connectDB = require('./config/db')
 const userRoutes = require('./routes/users');
 const homeRoutes = require('./routes/index');
 const storyRoutes = require('./routes/stories');
- 
+
+const connectDB = require('./config/db')
 
 
 // Load config
 dotenv.config({path: './config/config.env'})
 
-// Passport config
-// require('./config/passport')(passport)
-
 connectDB()
-const dbURL = process.env.DB_URL || "mongodb://localhost:27017/Storybooks"
+// const dbURL = process.env.MONGO_URI || "mongodb://localhost:27017/Storybooks"
 
 const app = express()
 
@@ -71,16 +68,16 @@ exphbs({
 
 app.set('view engine', '.hbs');
 
-const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
-const store = new MongoDBStore({
-  url: dbURL,
-  secret,
-  touchAfter: 24 * 60 * 60
-});
+// const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
+// const store = new MongoDBStore({
+//   url: dbURL,
+//   secret,
+//   touchAfter: 24 * 60 * 60
+// });
 
-store.on("error", function (e) {
-  console.log("SESSION STORE ERROR", e)
-})
+// store.on("error", function (e) {
+//   console.log("SESSION STORE ERROR", e)
+// })
 
 // Sessions
 const sessionConfig = {
@@ -114,8 +111,6 @@ app.use((req, res, next) => {
   res.locals.error = req.flash('error');
   next();
 })
-
-
 
 // Routes
 app.use('/', userRoutes);
