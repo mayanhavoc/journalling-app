@@ -68,7 +68,7 @@ exphbs({
 
 app.set('view engine', '.hbs');
 
-// const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
+const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
 // const store = new MongoDBStore({
 //   url: dbURL,
 //   secret,
